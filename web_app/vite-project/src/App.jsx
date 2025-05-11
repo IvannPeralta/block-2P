@@ -58,8 +58,8 @@ function App() {
   // Mint inicial (opcional para test)
   async function mintInitialBatch() {
     if (!contract) return;
-    for (let i = 0; i < 10; i++) {
-      const uri = `https://my-nft-metadata/${i}.json`; // Reemplaza con tu URL
+    for (let i = 1; i < 11; i++) {
+      const uri = `ipfs://bafybeigmal6ly6u6xq7r5fkt5bgqd4cb3kyc663ubq2kgvgv7wlmp34imq/nft${i}.json`; // Reemplaza con tu URL
       const price = ethers.parseEther("5");
       await (await contract.mintAndList(uri, price)).wait();
     }
