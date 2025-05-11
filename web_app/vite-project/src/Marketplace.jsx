@@ -15,29 +15,26 @@ export default function Marketplace({ currentAccount, connectWallet, mintInitial
       ) : (
         <>
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px', marginBottom: '20px'}}>
-            <p style={{fontSize: '0.9em', color: '#10b981', margin: 0}}>
+            <p style={{fontSize: '0.9em', color: '#10b981'}}>
               Conectado: {currentAccount && `${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}`}
             </p>
             <button className="secondary" onClick={mintInitialBatch}> Mint inicial</button>
           </div>
 
           <h2>Items en venta:</h2>
-          <div className="nft-grid">
+          <div className="nft-grid">    
             {marketItems.map((item) => (
               <div key={item.tokenId} className="nft-card">
-                <img src={`https://via.placeholder.com/150?text=NFT+${item.tokenId}`} alt={`NFT ${item.tokenId}`} />
-                <p>ID: {item.tokenId}</p>
+                <img src={item.image} alt={`NFT ${item.tokenId}`} style={{
+                                                                    width: "100%",
+                                                                    height: "200px",
+                                                                    objectFit: "cover",
+                                                                    borderRadius: "10px"
+                                                                }} />
+                <p>Nombre: {item.name}</p>
                 <p style={{ wordBreak: 'break-word', fontSize: '0.8em' }}>Vendedor: {item.seller}</p>
                 <p>Precio: {ethers.formatEther(item.price)} ETH</p>
-                <span style={{
-                display: 'inline-block',
-                padding: '4px 8px',
-                borderRadius: '12px',
-                backgroundColor: item.isSold ? '#dc2626' : '#16a34a',
-                color: 'white',
-                fontSize: '0.75rem',
-                fontWeight: '600'
-              }}>
+                <span className={`nft-status ${item.isSold ? 'sold' : 'available'}`}>
                 {item.isSold ? "Vendido" : "Disponible"}
               </span>
                 {!item.isSold && (

@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import MarketplaceABI from "./MarketplaceABI.json";
 import Marketplace from "./Marketplace.jsx";
 
+
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
 
 function App() {
@@ -34,11 +35,23 @@ function App() {
     if (!contract) return;
 
     const items = [];
-    for (let i = 0; i < 10; i++) {  // ejemplo para 10 NFTs iniciales
+    for (let i = 1; i < 11; i++) {  // ejemplo para 10 NFTs iniciales
       try {
         const [seller, price, isSold] = await contract.getListing(i);
         if (seller !== ethers.ZeroAddress) {
-          items.push({ tokenId: i, seller, price, isSold });
+          let tokenUri = await contract.tokenURI(i);
+          if (tokenUri.startsWith("ipfs://")) {
+            tokenUri = tokenUri.replace("ipfs://", "https://ipfs.io/ipfs/");
+          }
+          const response = await fetch(tokenUri);
+          const metadata = await response.json();
+          const imageUrl = ipfsToHttp(metadata.image);
+          items.push({  tokenId: i, 
+                        seller, 
+                        price, 
+                        isSold, 
+                        image: imageUrl, 
+                        name: metadata.name  });
         }
       } catch (err) {
         continue; // Si el token no existe, ignorar
@@ -65,6 +78,15 @@ function App() {
     }
     loadMarketItems();
   }
+
+  function ipfsToHttp(url) {
+    if (!url) return "";
+    if (url.startsWith("ipfs://")) {
+      return url.replace("ipfs://", "https://ipfs.io/ipfs/");
+    }
+    return url;
+  }
+
 
   useEffect(() => {
     if (contract) {
