@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 
-export default function Marketplace({ currentAccount, connectWallet, mintInitialBatch, marketItems, purchase }) {
+export default function Marketplace({ currentAccount, connectWallet, mintInitialBatch, marketItems, purchase, withdrawFunds, withdrawableBalance }) {
   return (
     <div className="marketplace-container">
       <h1>Marketplace NFTs</h1>
@@ -19,6 +19,10 @@ export default function Marketplace({ currentAccount, connectWallet, mintInitial
               Conectado: {currentAccount && `${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}`}
             </p>
             <button className="secondary" onClick={mintInitialBatch}> Mint inicial</button>
+            <button className="withdraw" onClick={withdrawFunds} disabled={withdrawableBalance === "0.0"}>
+              Retirar {withdrawableBalance} ETH
+            </button>
+
           </div>
 
           <h2>Items en venta:</h2>
