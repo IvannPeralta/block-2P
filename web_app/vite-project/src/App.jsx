@@ -44,7 +44,7 @@ function App() {
     if (!contract) return;
     const items = [];
     setIsLoading(true);
-    for (let i = 1; i < 11; i++) {  // ejemplo para 10 NFTs iniciales
+    for (let i = 0; i <= 10; i++) { 
       try {
         const [seller, price, isSold] = await contract.getListing(i);
         if (seller !== ethers.ZeroAddress) {
@@ -84,7 +84,7 @@ function App() {
   async function mintInitialBatch() {
     if (!contract) return;
     setIsLoading(true);
-    for (let i = 1; i < 11; i++) {
+    for (let i = 1; i <= 10; i++) {
       const uri = `ipfs://bafybeigmal6ly6u6xq7r5fkt5bgqd4cb3kyc663ubq2kgvgv7wlmp34imq/nft${i}.json`;
       const price = ethers.parseEther("5");
       await (await contract.mintAndList(uri, price)).wait();
