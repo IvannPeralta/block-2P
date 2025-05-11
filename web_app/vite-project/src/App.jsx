@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import MarketplaceABI from "./MarketplaceABI.json";
 import Marketplace from "./Marketplace.jsx";
 
-
+// Direccion del contrato
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
 
 function App() {
@@ -16,7 +16,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  // Conectar Wallet
+  /**
+   * Conecta la wallet del usuario utilizando MetaMask.
+   * Establece provider, signer y contrato.
+   */
   async function connectWallet() {
     try {
       setIsLoading(true);
@@ -39,7 +42,9 @@ function App() {
     }
   }
 
-  // Cargar NFTs listados
+  /**
+   * Obtiene todos los NFTs listados en el marketplace y sus metadatos.
+   */
   async function loadMarketItems() {
     if (!contract) return;
     const items = [];
@@ -70,7 +75,10 @@ function App() {
     setIsLoading(false);
   }
 
-  // Comprar NFT
+  /**
+   * Compra un NFT del marketplace.
+   * Se le pasa el ID del NFT a comprar y el precio del NFT a comprar.
+   */
   async function purchase(tokenId, price) {
     if (!contract) return;
     setIsLoading(true);
@@ -80,10 +88,15 @@ function App() {
     setIsLoading(false);
   }
 
-  // Mint inicial
+  /**
+   * 
+   * Minta un NFT y lo lista en el marketplace. Solo para pruebas
+   * Se le pasa la URI del NFT y el precio.
+   */
   async function mintInitialBatch() {
     if (!contract) return;
     setIsLoading(true);
+    // Minta 10 NFTs de prueba 
     for (let i = 1; i <= 10; i++) {
       const uri = `ipfs://bafybeigmal6ly6u6xq7r5fkt5bgqd4cb3kyc663ubq2kgvgv7wlmp34imq/nft${i}.json`;
       const price = ethers.parseEther("5");
@@ -93,14 +106,16 @@ function App() {
     setIsLoading(false);
   }
 
-  // Retirar fondos acumulados del contrato
+  /**
+   * Retira los fondos acumulados en el contrato.
+   */
   async function withdrawFunds() {
     if (!contract) return;
     try {
       setIsLoading(true);
       const tx = await contract.withdraw();
       await tx.wait();
-      checkWithdrawableFunds();
+      checkWithdrawableFunds(); // Actualiza el balance
     } catch (error) {
       console.error("Error al retirar fondos:", error);
       alert("No se pudo retirar. Asegúrate de tener fondos acumulados.");
@@ -109,7 +124,9 @@ function App() {
     }
   } 
 
-  // Consultar fondos acumulados
+  /**
+   * Consultar fondos disponibles para retirar
+  */
   async function checkWithdrawableFunds() {
     if (!contract || !currentAccount) return;
     try {
@@ -130,7 +147,7 @@ function App() {
     return url;
   }
 
-
+  //  Hook para cargar datos iniciales al conectar contrato/cuenta
   useEffect(() => {
     if (contract) {
       loadMarketItems();
