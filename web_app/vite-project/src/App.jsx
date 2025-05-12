@@ -90,7 +90,7 @@ function App() {
 
   /**
    * 
-   * Minta un NFT y lo lista en el marketplace. Solo para pruebas
+   * Minta un lote de NFTs y los lista en el marketplace.
    * Se le pasa la URI del NFT y el precio.
    */
   async function mintInitialBatch() {
